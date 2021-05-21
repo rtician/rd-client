@@ -89,7 +89,7 @@ class RDStation(RDClient):
 
         response = self.post('/auth', data=data)
 
-        if response.status == 200:
+        if response.status_code == 200:
             response_json = response.json()
             self.access_token = response_json['access_token']
             self.refresh_token = response_json['refresh_token']
