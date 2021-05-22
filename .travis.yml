@@ -1,7 +1,6 @@
 language: python
 
 python:
-  - "3.4"
   - "3.5"
   - "3.6"
   - "3.7"
@@ -14,3 +13,6 @@ install:
 
 script:
   - poetry run py.test --cov-report term --cov=rd_client
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
