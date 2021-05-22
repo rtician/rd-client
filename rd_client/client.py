@@ -18,7 +18,7 @@ class API:
         return d
 
     @staticmethod
-    def supports_body(self, method):
+    def supports_body(method):
         return method.lower() in ('delete', 'patch', 'post', 'put')
 
     def build_url(self, uri):
@@ -33,9 +33,13 @@ class API:
 
         url = self.build_url(uri)
         if self.supports_body(method):
-            response = request_method(url, data=json.dumps(data), headers=updated_headers)
+            response = request_method(
+                url,
+                data=json.dumps(data) if data else None,
+                headers=updated_headers
+            )
         else:
-            response = request_method(url, params=self.params, headers=updated_headers)
+            response = request_method(url, params=params, headers=updated_headers)
 
         return response
 
