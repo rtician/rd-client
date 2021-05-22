@@ -6,19 +6,20 @@ import requests
 from rd_client.errors import MissingAuthorizationError
 
 
-class RDClient:
+class API:
     base_url = 'https://api.rd.services'
-    client_id = None
-    client_secret = None
     access_token = None
-    supports_body = {'post', 'patch'}
 
     @property
     def headers(self):
         d = {'Content-Type': 'application/json'}
         if self.access_token is not None:
-            d['Authorization'] = 'Bearer {token}'.format(token=access_token)
+            d['Authorization'] = 'Bearer {token}'.format(token=self.access_token)
         return d
+
+    @staticmethod
+    def supports_body(self, method):
+        return method.lower() in ('delete', 'patch', 'post', 'put')
 
     def build_url(self, uri):
         return '{base_url}{uri}'.format(base_url=self.base_url, uri=uri)
@@ -31,7 +32,7 @@ class RDClient:
             updated_headers.update(headers)
 
         url = self.build_url(uri)
-        if method.lower() in self.supports_body:
+        if self.supports_body(method):
             response = request_method(url, data=json.dumps(data), headers=updated_headers)
         else:
             response = request_method(url, params=self.params, headers=updated_headers)
@@ -41,14 +42,20 @@ class RDClient:
     def get(self, uri, params=None, data=None, headers=None):
         return self.request('get', uri, params, data, headers)
 
+    def delete(self, uri, params=None, data=None, headers=None):
+        return self.request('delete', uri, params, data, headers)
+
     def post(self, uri, params=None, data=None, headers=None):
         return self.request('post', uri, params, data, headers)
 
     def patch(self, uri, params=None, data=None, headers=None):
         return self.request('patch', uri, params, data, headers)
 
+    def put(self, uri, params=None, data=None, headers=None):
+        return self.request('put', uri, params, data, headers)
 
-class RDStation(RDClient):
+
+class RDClient(API):
     def __init__(self, client_id, client_secret, redirect_uri, access_token=None, code=None):
         self.client_id = client_id
         self.client_secret = client_secret
