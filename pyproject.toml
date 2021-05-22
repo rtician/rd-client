@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "rd_client"
+name = "rd-client"
 version = "0.1.0"
 description = "Client for RDStation API"
 authors = ["Ramiro Tician <ramirotician@gmail.com>"]

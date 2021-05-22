@@ -1,12 +1,12 @@
 # RDClient
-[![Build Status](https://travis-ci.com/rtician/rd_client.svg?branch=main)](https://travis-ci.com/rtician/rd_client)
-[![codecov](https://codecov.io/gh/rtician/rd_client/branch/main/graph/badge.svg)](https://codecov.io/gh/rtician/rd_client)
+[![Build Status](https://travis-ci.com/rtician/rd-client.svg?branch=main)](https://travis-ci.com/rtician/rd-client)
+[![codecov](https://codecov.io/gh/rtician/rd-client/branch/main/graph/badge.svg)](https://codecov.io/gh/rtician/rd-client)
 
 Client helper to use RDStation API
 
 ### How can I install it?
 ```
-$ pip install rd_client
+$ pip install rd-client
 ```
 
 ### How to use it?
@@ -28,8 +28,8 @@ Poetry it's an easy way no manage dependencies and build a package, you can see 
 Download the project and install the dependencies
 
 ```bash
-$ git clone https://github.com/rtician/rd_client
-$ cd rd_client
+$ git clone https://github.com/rtician/rd-client
+$ cd rd-client
 $ poetry install
 ```
 
