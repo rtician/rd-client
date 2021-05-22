@@ -7,7 +7,7 @@ from rd_client import MissingAuthorizationError
 
 
 class MockedRequest:
-    def __init__(self, json_data, status_code):
+    def __init__(self, json_data=None, status_code=None):
         self.json_data = json_data
         self.status_code = status_code
 
@@ -84,6 +84,74 @@ class TestAPI:
             headers=self.base_headers
         )
 
+    @patch('rd_client.client.requests')
+    def test_put(self, requests_mock, base_api):
+        requests_mock.put.return_value = {}
+        base_api.put('/uri')
+
+        requests_mock.put.assert_called_once_with(
+            '{}/uri'.format(self.url),
+            data=None,
+            headers=self.base_headers
+        )
+
+    @patch('rd_client.client.requests')
+    def test_requests(self, requests_mock, base_api):
+        requests_mock.patch.return_value = MockedRequest()
+        response = base_api.request('patch', '/uri', None, None, None)
+
+        requests_mock.patch.assert_called_once_with(
+            '{}/uri'.format(self.url),
+            data=None,
+            headers=self.base_headers
+        )
+        assert isinstance(response, MockedRequest)
+
+    @patch('rd_client.client.requests')
+    def test_requests_with_data(self, requests_mock, base_api):
+        requests_mock.patch.return_value = MockedRequest()
+
+        response = base_api.request('patch', '/uri', None, {'key': 'value'}, None)
+        requests_mock.patch.assert_called_once_with(
+            '{}/uri'.format(self.url),
+            data=json.dumps({'key': 'value'}),
+            headers=self.base_headers
+        )
+        assert isinstance(response, MockedRequest)
+
+        # Params cannot be passed for methods that supports body
+        response = base_api.request('patch', '/uri', 'key=value', None, None)
+        requests_mock.patch.assert_called_with(
+            '{}/uri'.format(self.url),
+            data=None,
+            headers=self.base_headers
+        )
+        assert isinstance(response, MockedRequest)
+
+    @patch('rd_client.client.requests')
+    def test_requests_with_params(self, requests_mock, base_api):
+        requests_mock.get.return_value = MockedRequest()
+
+        response = base_api.request('get', '/uri', 'key=value', {'key': 'value'}, None)
+        requests_mock.get.assert_called_once_with(
+            '{}/uri'.format(self.url),
+            params='key=value',
+            headers=self.base_headers
+        )
+        assert isinstance(response, MockedRequest)
+
+    @patch('rd_client.client.requests')
+    def test_requests_with_headers(self, requests_mock, base_api):
+        requests_mock.get.return_value = MockedRequest()
+
+        response = base_api.request('get', '/uri', 'key=value', {'key': 'value'}, {'auth': '1'})
+        requests_mock.get.assert_called_once_with(
+            '{}/uri'.format(self.url),
+            params='key=value',
+            headers={'Content-Type': 'application/json', 'auth': '1'}
+        )
+        assert isinstance(response, MockedRequest)
+
 
 
 class TestRDClient:
@@ -106,12 +174,13 @@ class TestRDClient:
 
     @patch('rd_client.client.RDClient.no_access_token')
     def test_authorize_with_no_token(self, no_access_token_mock, rd_client):
+        rd_client.access_token = None
         rd_client.authorize()
 
         no_access_token_mock.assert_called_once_with()
 
     @patch('rd_client.client.RDClient._generate_token')
-    def test_authorize_with_no_token(self, generate_token_mock, rd_client):
+    def test_authorize_with_token(self, generate_token_mock, rd_client):
         rd_client.access_token = '123123'
         rd_client.authorize()
 
