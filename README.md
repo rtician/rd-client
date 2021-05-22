@@ -1,5 +1,5 @@
 # RDClient
-[![Build Status](https://travis-ci.org/rtician/rd_client.svg?branch=main)](https://travis-ci.org/rtician/rd_client)
+[![Build Status](https://travis-ci.com/rtician/rd_client.svg?branch=main)](https://travis-ci.com/rtician/rd_client)
 [![codecov](https://codecov.io/gh/rtician/rd_client/branch/main/graph/badge.svg)](https://codecov.io/gh/rtician/rd_client)
 
 Client helper to use RDStation API
