@@ -173,14 +173,24 @@ class TestRDClient:
         assert url in exc_info.value.args[1]
 
     @patch('rd_client.client.RDClient.no_access_token')
-    def test_authorize_with_no_token(self, no_access_token_mock, rd_client):
+    def test_authorize_with_no_token_and_no_code(self, no_access_token_mock, rd_client):
         rd_client.access_token = None
+        rd_client.code = None
         rd_client.authorize()
 
         no_access_token_mock.assert_called_once_with()
 
     @patch('rd_client.client.RDClient._generate_token')
-    def test_authorize_with_token(self, generate_token_mock, rd_client):
+    def test_authorize_with_code_and_no_token(self, generate_token_mock, rd_client):
+        rd_client.code = '000'
+        rd_client.access_token = None
+        rd_client.authorize()
+
+        generate_token_mock.assert_called_once_with()
+
+    @patch('rd_client.client.RDClient._generate_token')
+    def test_authorize_with_token_and_code(self, generate_token_mock, rd_client):
+        rd_client.code = '000'
         rd_client.access_token = '123123'
         rd_client.authorize()
 

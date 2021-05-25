@@ -72,7 +72,7 @@ class RDClient(API):
         return self.access_token is None
 
     def authorize(self):
-        if self.missing_token:
+        if self.missing_token and self.code is None:
             self.no_access_token()
         else:
             self._generate_token()
