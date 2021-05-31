@@ -64,6 +64,7 @@ class RDClient(API):
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
+        self.access_token = access_token
         self.code = code
         self.refresh_token = None
 
