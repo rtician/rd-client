@@ -99,7 +99,7 @@ class RDClient(API):
         else:
             data['code'] = self.code
 
-        response = self.post('/auth', data=data)
+        response = self.post('/auth/token', data=data)
 
         if response.status_code == 200:
             response_json = response.json()
