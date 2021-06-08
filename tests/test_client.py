@@ -209,7 +209,7 @@ class TestRDClient:
 
         rd_client._generate_token()
 
-        post_mock.assert_called_once_with('/auth', data={
+        post_mock.assert_called_once_with('/auth/token', data={
             'client_id': '123',
             'client_secret': '456',
             'code': 'code'
@@ -232,7 +232,7 @@ class TestRDClient:
 
         rd_client._generate_token()
 
-        post_mock.assert_called_once_with('/auth', data={
+        post_mock.assert_called_once_with('/auth/token', data={
             'client_id': '123',
             'client_secret': '456',
             'refresh_token': 'refresh_token'
