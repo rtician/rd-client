@@ -207,7 +207,7 @@ class TestRDClient:
             200
         )
 
-        rd_client._generate_token()
+        response = rd_client._generate_token()
 
         post_mock.assert_called_once_with('/auth/token', data={
             'client_id': '123',
@@ -215,8 +215,8 @@ class TestRDClient:
             'code': 'code'
         })
 
-        assert rd_client.access_token == 'access_token'
-        assert rd_client.refresh_token == 'refresh_token'
+        assert response['access_token'] == 'access_token'
+        assert response['refresh_token'] == 'refresh_token'
 
     @patch('rd_client.client.RDClient.post')
     def test_generate_token_with_refresh_token(self, post_mock, rd_client):
@@ -230,7 +230,7 @@ class TestRDClient:
             200
         )
 
-        rd_client._generate_token()
+        response = rd_client._generate_token()
 
         post_mock.assert_called_once_with('/auth/token', data={
             'client_id': '123',
@@ -238,8 +238,8 @@ class TestRDClient:
             'refresh_token': 'refresh_token'
         })
 
-        assert rd_client.access_token == 'new_access_token'
-        assert rd_client.refresh_token == 'new_refresh_token'
+        assert response['access_token'] == 'new_access_token'
+        assert response['refresh_token'] == 'new_refresh_token'
 
     @patch('rd_client.client.RDClient.post')
     def test_generate_token_with_error(self, post_mock, rd_client):

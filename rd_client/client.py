@@ -60,13 +60,21 @@ class API:
 
 
 class RDClient(API):
-    def __init__(self, client_id, client_secret, redirect_uri, access_token=None, code=None):
+    def __init__(
+            self,
+            client_id,
+            client_secret,
+            redirect_uri,
+            access_token=None,
+            code=None,
+            refresh_token=None
+    ):
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.access_token = access_token
         self.code = code
-        self.refresh_token = None
+        self.refresh_token = refresh_token
 
     @property
     def missing_token(self):
@@ -75,8 +83,8 @@ class RDClient(API):
     def authorize(self):
         if self.missing_token and self.code is None:
             self.no_access_token()
-        else:
-            self._generate_token()
+
+        return self._generate_token()
 
     def no_access_token(self):
         url = '{base_url}/auth/dialog?client_id={client_id}&redirect_uri={redirect_uri}'.format(
@@ -100,8 +108,4 @@ class RDClient(API):
             data['code'] = self.code
 
         response = self.post('/auth/token', data=data)
-
-        if response.status_code == 200:
-            response_json = response.json()
-            self.access_token = response_json['access_token']
-            self.refresh_token = response_json['refresh_token']
+        return response.json()
